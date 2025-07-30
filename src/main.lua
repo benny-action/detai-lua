@@ -12,3 +12,10 @@ local json = require("dkjson")
 --TODO: add posix features like file permissions and error handling
 --
 --]]
+
+package.path = package.path .. ";./src/?.lua"
+
+local inventory = require("inventory")
+local cli = require("cli")
+
+--main logic under
