@@ -5,9 +5,6 @@
 -- local json = require("dkjson")
 --
 --[[
---NOTE: path to success
---TODO: begin with basic file io
---TODO: create table structure for items
 --TODO: add json serialization to save load data.
 --TODO: add posix features like file permissions and error handling
 --
@@ -15,19 +12,29 @@
 
 package.path = package.path .. ";./src/?.lua"
 
-local inventory = require("inventory")
-
+local inventory_mod = require("inventory")
 local cli = require("cli")
 
-local my_inventory = inventory.new()
-
-local success, message = inventory.add_item(my_inventory, "Apple", 2, "Sweet, Red")
-if success then
-	print("Succcess: " .. message)
-else
-	print("Error: " .. message)
+-- parse args
+local args = {}
+for i = 1, #arg do
+	args[i] = arg[i]
 end
 
+-- simple parsing thing here
+local command, params = cli.parse_args(args)
+local my_inventory = inventory_mod.new()
+
+--load existing inv here
+local success = cli.handle_command(command, params, my_inventory)
+
+if not success then
+	os.exit(1)
+end
+
+-- save inventory with something here.....
+
+-- test thing
 for i, item in ipairs(my_inventory.items) do
 	print(string.format("%s | %d Senses | %s", item.name, item.senses, item.description))
 end
